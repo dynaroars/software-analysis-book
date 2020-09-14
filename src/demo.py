@@ -3,11 +3,8 @@
 from imp import *
 
 def main():
-
-    program = Program([
-        Assign(Name("x"), BinaryOp(Name("x"), Operator.ADD, Constant(10))),
-    ])
-    print(program)
+    expression = Expression.from_str('y - 2 >= x + 5 and z * 2 < 10')
+    print(expression)
 
 
 if __name__ == "__main__":
