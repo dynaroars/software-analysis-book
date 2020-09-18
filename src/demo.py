@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
-from imp import *
+import parse
 
 def main():
-    expression = Expression.from_str('y - 2 >= x + 5 and z * 2 < 10')
-    print(expression)
+    s = 'y - 2 >= x + 5 and z * 2 < 10'
+    expr = parse.from_str(s)
+    print('parsing expression:')
+    print(s)
+    print('=====')
+    print(expr)
 
 
 if __name__ == "__main__":
