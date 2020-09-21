@@ -1,7 +1,9 @@
 from typing import List
 from enum import Enum
 import parse
-from z3.z3 import ExprRef
+import z3
+from z3.z3 import ExprRef, BoolRef, ArithRef
+from parse import expr_from_str as expr
 
 class Statement:
     def __init__(self):
@@ -16,12 +18,15 @@ class Program:
 # Statements
 
 class Assign(Statement):
-    def __init__(self, target: ExprRef, value: ExprRef):
-        self.target = target
+    def __init__(self, identifier: str, value: ExprRef):
+        if isinstance(value, z3.BoolRef):
+            self.target = z3.Bool(identifier)
+        elif isinstance(value, z3.ArithRef):
+            self.target = z3.ToReal(z3.Int(identifier))
         self.value = value
     def __str__(self):
         return "{} = {}".format(self.target, self.value)
-
+   
 class IfThenElse(Statement):
     def __init__(self, test: ExprRef, body: List[Statement], orelse: List[Statement]):
         self.test = test
@@ -40,9 +45,3 @@ class WhileLoop(Statement):
     def __str__(self):
         b = [" {};".format(s) for s in self.body].join()
         return "while {} then {}".format(self.test, b)
-
-class Assert(Statement):
-    def __init__(self, test: ExprRef):
-        self.test = test
-    def __str__(self):
-        return "assert {}".format(self.test)
